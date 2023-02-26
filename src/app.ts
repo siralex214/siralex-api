@@ -9,6 +9,9 @@ import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHt
 import { expressMiddleware } from "@apollo/server/express4";
 import routes from "./routes";
 
+import resolvers from "./graphql/resolvers";
+import typeDefs from "./graphql/typeDefs";
+
 const main = async () => {
   console.log("Hello World");
 
@@ -22,19 +25,7 @@ const main = async () => {
   app.use(express.json());
   app.use(cors());
 
-  const typeDefs = `#graphql
-  type Query {
-    hello: String
-  }
-`;
-
   // A map of functions which return data for the schema.
-  const resolvers = {
-    Query: {
-      hello: () => "world",
-    },
-  };
-
   const server = new ApolloServer({
     typeDefs,
     resolvers,
