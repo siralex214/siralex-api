@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "clear || cls & nodemon --config nodemon.json src/app.ts",
     "build": "tsc",
+    "docker:build": "docker build . -t siralex-api",
     "start": "node dist/app.js",
     "go": "npm run build && npm run start"
   },
