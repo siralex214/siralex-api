@@ -12,9 +12,11 @@ import routes from "./routes";
 import resolvers from "./graphql/resolvers";
 import typeDefs from "./graphql/typeDefs";
 
-const main = async () => {
-  console.log("Hello World");
+export interface MyContext {
+  req?: Request;
+}
 
+const main = async () => {
   const port = APP.port as number;
   const host = APP.host as string;
 
@@ -26,7 +28,7 @@ const main = async () => {
   app.use(cors());
 
   // A map of functions which return data for the schema.
-  const server = new ApolloServer({
+  const server = new ApolloServer<MyContext>({
     typeDefs,
     resolvers,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
@@ -38,7 +40,12 @@ const main = async () => {
     Log.ready("Database is connected");
 
     await server.start();
-    app.use("/graphql", expressMiddleware(server));
+    app.use(
+      "/graphql",
+      expressMiddleware(server, {
+        context: async ({ req }) => ({ req: req }),
+      })
+    );
     Log.ready("apollo server started");
 
     routes(app);
@@ -52,19 +59,3 @@ const main = async () => {
 };
 
 main();
-
-// const main2 = async () => {
-//   // The GraphQL schema
-
-//   const app = express();
-//   const httpServer = http.createServer(app);
-
-//   // Set up Apollo Server
-
-//   await new Promise((resolve: any) =>
-//     httpServer.listen({ port: 4000 }, resolve)
-//   );
-//   console.log("🚀 Server ready at http://localhost:4000");
-// };
-
-// main2();
