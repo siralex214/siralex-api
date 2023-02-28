@@ -8,16 +8,16 @@ WORKDIR /src
 COPY package*.json ./
 
 # Installez les dépendances npm
-RUN npm install
+RUN yarn
 
 # Copie le reste des fichiers de l'application
 COPY . .
 
 # Compilez TypeScript en JavaScript
-RUN npm run build
+RUN yarn build
 
 # Exposez le port sur lequel l'API va écouter
 EXPOSE 8080
 
 # Démarrez l'application
-CMD [ "npm", "start" ]
+CMD [ "yarn", "start" ]
