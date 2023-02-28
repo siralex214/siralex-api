@@ -1,8 +1,9 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 export interface TaskDocument extends mongoose.Document {
   title: string;
   description: string;
+  idUser: string;
   status: string;
   createdAt: string;
   updatedAt: string;
@@ -18,6 +19,12 @@ const TaskSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    idUser: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+
     status: {
       type: String,
       required: true,

@@ -3,6 +3,7 @@ import { gql } from "apollo-server-core";
 export default gql`
   type Task {
     id: ID!
+    idUser: ID!
     title: String!
     description: String!
     status: String!
@@ -13,12 +14,12 @@ export default gql`
   input taskInput {
     title: String!
     description: String!
-    status: String
   }
 
   type Query {
     tasks: [Task]
     task(id: ID!): Task
+    tasksByUser: [Task]
   }
 
   type Mutation {

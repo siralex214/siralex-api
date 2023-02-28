@@ -1,5 +1,8 @@
+import { Request } from "express";
 import TaskModel from "../../Model/Task";
+import { role } from "../../types/role";
 import { status } from "../../types/status";
+import checkAuth from "../../utils/checkAuth";
 
 export default {
   Query: {
@@ -14,19 +17,36 @@ export default {
         throw new Error(error);
       }
     },
+    async tasksByUser(_: any, __: any, context: { req: Request }) {
+      const user = await checkAuth(context, role.user);
+
+      if (!user) {
+        throw new Error("Not authorized");
+      }
+
+      return await TaskModel.find({ idUser: user.id });
+    },
   },
   Mutation: {
     async createTask(
       _: any,
       {
         taskInput: { title, description },
-      }: { taskInput: { title: string; description: string } }
+      }: { taskInput: { title: string; description: string } },
+      context: { req: Request }
     ) {
+      const user = await checkAuth(context, role.user);
+
+      if (!user) {
+        throw new Error("Not authorized");
+      }
+
       const status: status = "TO DO";
       const task = new TaskModel({
         title,
         description,
         status,
+        idUser: user.id,
       });
 
       await task.save();
@@ -36,13 +56,12 @@ export default {
       _: any,
       {
         id,
-        taskInput: { title, description, status },
+        taskInput: { title, description },
       }: {
         id: string;
         taskInput: {
           title: string;
           description: string;
-          status: status;
         };
       }
     ) {
@@ -52,7 +71,6 @@ export default {
           {
             title,
             description,
-            status,
           },
           { new: true }
         );
