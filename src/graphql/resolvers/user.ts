@@ -102,7 +102,10 @@ export default {
         if (!isMatch) {
           throw new Error("Incorrect password");
         }
-        return generateToken(user);
+        return {
+          user: user,
+          token: generateToken(user),
+        };
       } catch (error) {
         Log.error(error);
         throw new Error(error);

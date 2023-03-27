@@ -12,6 +12,11 @@ export default gql`
     deactivatedAt: Boolean!
   }
 
+  type Login {
+    user: User!
+    token: String!
+  }
+
   input userInputRegister {
     name: String!
     username: String!
@@ -31,6 +36,6 @@ export default gql`
 
   type Mutation {
     register(userInput: userInputRegister): User
-    login(userInput: userInputLogin): String
+    login(userInput: userInputLogin): Login
   }
 `;

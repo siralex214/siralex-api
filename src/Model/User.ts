@@ -36,6 +36,9 @@ UserSchema.pre<UserDocument>("save", async function (next) {
 
   user.password = hash;
   user.role = role.user;
+  user.createdAt = new Date().toISOString();
+  user.updatedAt = new Date().toISOString();
+  user.deactivatedAt = false;
 
   return next();
 });
