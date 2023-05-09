@@ -12,6 +12,8 @@ import routes from "./routes";
 import resolvers from "./graphql/resolvers";
 import typeDefs from "./graphql/typeDefs";
 
+import rtmpServer from "./config/liveStreamConfig";
+
 export interface MyContext {
   req?: Request;
 }
@@ -27,7 +29,8 @@ const main = async () => {
   app.use(express.json());
   app.use(cors());
 
-  // A map of functions which return data for the schema.
+  rtmpServer();
+
   const server = new ApolloServer<MyContext>({
     typeDefs,
     resolvers,
@@ -40,6 +43,7 @@ const main = async () => {
     Log.ready("Database is connected");
 
     await server.start();
+
     app.use(
       "/graphql",
       expressMiddleware(server, {
