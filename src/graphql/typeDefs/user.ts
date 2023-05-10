@@ -7,6 +7,7 @@ export default gql`
     username: String!
     email: String!
     password: String!
+    streamKey: String!
     createdAt: String!
     updatedAt: String!
     deactivatedAt: Boolean!

@@ -3,6 +3,7 @@ import { APP } from "../config/default";
 import bcrypt from "bcrypt";
 import Log from "../utils/Log";
 import { role } from "../types/role";
+import { generateKey } from "../utils/generateStreamKey";
 
 export interface UserDocument extends mongoose.Document {
   name: string;
@@ -10,6 +11,7 @@ export interface UserDocument extends mongoose.Document {
   email: string;
   role: role;
   password: string;
+  streamKey: string;
   createdAt: string;
   updatedAt: string;
   deactivatedAt: boolean;
@@ -22,6 +24,7 @@ const UserSchema = new Schema({
   email: String,
   role: Number,
   password: String,
+  streamKey: String,
   createdAt: Date,
   updatedAt: Date,
   deactivatedAt: Boolean,
@@ -35,6 +38,7 @@ UserSchema.pre<UserDocument>("save", async function (next) {
   const hash = await bcrypt.hash(user.password, salt);
 
   user.password = hash;
+  this.streamKey = generateKey();
   user.role = role.user;
   user.createdAt = new Date().toISOString();
   user.updatedAt = new Date().toISOString();
