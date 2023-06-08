@@ -11,4 +11,8 @@ export default (app: Express) => {
       })
       .status(404);
   });
+
+  app.get("/index", (_, res) => {
+    res.sendFile(__dirname + "/index.html");
+  });
 };

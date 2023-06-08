@@ -3,7 +3,7 @@ import { exec } from "child_process";
 import { getStreamKeyFromStreamPath } from "../utils/getStreamKey";
 import fs from "fs";
 import path from "path";
-import UserModel from "../Model/User";
+// import UserModel from "../Model/User";
 
 const rtmpServer = () => {
   const config = {
@@ -26,16 +26,16 @@ const rtmpServer = () => {
 
     const stream_key = getStreamKeyFromStreamPath(streamPath);
 
-    const user = await UserModel.findOne({ streamKey: stream_key });
-    console.log(
-      `voici l'utilisateur qui pocède la clé de stream suivante: ${stream_key} `
-    );
-    console.log(user);
+    // const user = await UserModel.findOne({ streamKey: stream_key });
+    // console.log(
+    //   `voici l'utilisateur qui pocède la clé de stream suivante: ${stream_key} `
+    // );
+    // console.log(user);
 
-    if (!user) {
-      console.log("no user found");
-      return;
-    }
+    // if (!user) {
+    //   console.log("no user found");
+    //   return;
+    // }
 
     const inputPath = "rtmp://localhost:1935/live/" + stream_key;
     const outputPath = "./hls/stream.m3u8";
@@ -52,6 +52,7 @@ const rtmpServer = () => {
     });
 
     ffmpeg.stderr.on("data", (data) => {
+      console.log("tototototootototototototo");
       console.error(`stderr: ${data}`);
     });
 
